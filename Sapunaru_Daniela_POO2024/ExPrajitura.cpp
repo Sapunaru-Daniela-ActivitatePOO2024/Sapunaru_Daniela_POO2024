@@ -39,11 +39,12 @@ public:
 		this->denumire = p.denumire;
 		this->nrCalorii = p.nrCalorii;
 		this->nrIngrediente = p.nrIngrediente;
-
+                if(p.gramajIngrediente!=NULL){
 		this->gramajIngrediente = new float[p.nrIngrediente];
 		for (int i = 0; i < p.nrIngrediente; i++) {
 			this->gramajIngrediente[i] = p.gramajIngrediente[i];
 
+		}
 		}
 
 		this->esteVegana = p.esteVegana;
