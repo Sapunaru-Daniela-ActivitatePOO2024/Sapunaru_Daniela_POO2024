@@ -127,7 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ExPrajitura.cpp" />
+    <ClCompile Include="ExSejur.cpp" />
     <ClCompile Include="Seminar1.cpp" />
+    <ClCompile Include="Seminar2.cpp" />
+    <ClCompile Include="Seminar3.cpp" />
+    <ClCompile Include="Seminar4.cpp" />
+    <ClCompile Include="Seminar5.cpp" />
+    <ClCompile Include="Seminar6.cpp" />
+    <ClCompile Include="TASK-1.cpp" />
+    <ClCompile Include="TASK-2.cpp" />
+    <ClCompile Include="TASK3.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
