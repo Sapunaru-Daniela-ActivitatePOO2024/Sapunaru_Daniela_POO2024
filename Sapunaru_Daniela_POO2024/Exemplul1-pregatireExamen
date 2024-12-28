@@ -1,0 +1,254 @@
+#include<iostream>
+using namespace std;
+//Se consideră o aplicate pentru gestionarea activității unei magazin care vinde baterii externe de
+//  tipul powerBank. Se vor urmări atribute specifice, precum: capacitate greutate număr intrări/ieșiri,
+//  culoare etc. Datele membre sunt private si sunt puse la dispoziție metode de acces. 
+// Clasa conține cel puțin patru câmpuri dintre care unul este alocat dinamic, constructori, 
+// metodele specifice claselor cu membri alocați dinamic și operatorul de afișare. 
+// Folosiți un membru static sau const
+
+class Baterie {
+private: 
+    static int capacitate;
+	float* pret;
+	int nrMagazin;
+	float greutate;
+	string culoare;
+	int nivelBaterie;
+
+public:
+
+	Baterie( int nrMagazin,float* pret, float greutate, string culoare, int nivel) {
+		this->nrMagazin = nrMagazin;
+		this->pret = new float[this->nrMagazin];
+		for (int i = 0; i < this->nrMagazin; i++) {
+			this->pret[i] = 100 + i * 10;
+		}
+		this->greutate = greutate;
+		this->culoare = culoare;
+		this->nivelBaterie = nivel;
+	}
+
+	Baterie() {
+		this->nrMagazin = 0;
+		this->pret = NULL;
+		this->greutate = 10;
+		this->culoare = "gri";
+		this->nivelBaterie = 100;
+	}
+
+	~Baterie() {
+		if (this->pret) {
+			delete[] this->pret;
+		}
+	}
+
+	Baterie(const Baterie& b) {
+		this->nrMagazin = b.nrMagazin;
+		this->pret = new float[b.nrMagazin];
+		for (int i = 0; i < this->nrMagazin; i++) {
+			this->pret[i] = b.pret[i];
+		}
+		this->greutate = b.greutate;
+		this->culoare = b.culoare;
+		this->nivelBaterie = b.nivelBaterie;
+
+	}
+
+	Baterie operator = (const Baterie & b){
+		if (this != &b) {
+			this->nrMagazin = b.nrMagazin;
+			if (this->pret != NULL) {
+				delete[] this->pret;
+			}
+			if (this->nrMagazin > 0) {
+				this->pret = new float[b.nrMagazin];
+				for (int i = 0; i < this->nrMagazin; i++) {
+					this->pret[i] = b.pret[i];
+				}
+			}
+			this->greutate = b.greutate;
+			this->culoare = b.culoare;
+			this->nivelBaterie = b.nivelBaterie;
+		}
+		return *this;
+	}
+
+	string getCuloare() {
+		return this->culoare;
+	}
+	void setCuloate(string culoare) {
+		if (culoare.length() > 1)
+		{
+			this->culoare = culoare;
+		} 
+	}
+	int getNivelBaterie() {
+		return this->nivelBaterie;
+	}
+	void setNivelBaterie(int niv) {
+		if (niv > 0) {
+			this->nivelBaterie = niv;
+		}
+	}
+
+	static int getCapacitate() {
+		return Baterie::capacitate;
+	}
+
+	float getGreutate() {
+		return this->greutate;
+	}
+	void setGreutate(float greutate) {
+		if (greutate > 0) {
+			this->greutate = greutate;
+		}
+	}
+
+	int getNrMagazin() {
+		return this->nrMagazin;
+	}
+	float* getPreturi() {
+		return this->pret;
+	}
+	float getPret(int index) {
+		if (index >= 0 && index < this->nrMagazin) {
+			return this->pret[index];
+		}
+	}
+
+	void setNrMagazine(int nrMagazine, float* pret) {
+		if (nrMagazine > 0) {
+			this->nrMagazin = nrMagazine;
+			if (this->pret != NULL) {
+				delete[] this->pret;
+			}
+			this->pret = new float[this->nrMagazin];
+			for (int i = 0; i < this->nrMagazin; i++) {
+				this->pret[i] = pret[i];
+			}
+		}
+	}
+
+
+	friend ostream& operator<<(ostream& out, Baterie b) {
+		out << "Capacitate:" << Baterie::capacitate << endl;
+		out << "Culoare: " << b.culoare << endl;
+		out << "Greutate:" << b.greutate << endl;
+		out << "Nr magazine: " << b.nrMagazin << endl;
+		if (b.pret != NULL) {
+			for (int i = 0; i < b.nrMagazin; i++) {
+				out << "Pretul bateriei la magazinul " << i << ": " << b.pret[i] << endl;
+			}
+		}
+		out << "Nivel baterie:" << b.nivelBaterie;
+		out << endl;
+		return out;
+
+	}
+
+//Se vor defini operator+= si operator-= care permit incarcarea powerbank-ului respectiv 
+// descarcarea acestuia
+	Baterie operator+=(int nivel) {
+		this->nivelBaterie += nivel;
+		return *this;
+	}
+
+	Baterie operator-=(int nivel) {
+		this->nivelBaterie -= nivel;
+		return *this;
+    }
+
+//Definiti operator== care compară doua obiecte de tip PowerBlank si 
+//returneaza true dacă toate valorile atributelor corespunzatoare sunt egale intre ele
+
+	bool operator==(const Baterie& b) {
+		return (this->greutate == b.greutate) &&
+			(this->nrMagazin == b.nrMagazin) &&
+			(this->nivelBaterie == b.nivelBaterie) &&
+			(this->culoare == b.culoare) &&
+			(this->pret == b.pret);
+
+	}
+
+
+};
+int Baterie::capacitate = 100;
+
+//Exemplificati conceptul de relatie de tip „is a” prin specializarea
+//clasei PowerBank. Testați soluția prin instanțierea noii clase. 
+
+class PowerBank : public Baterie {
+private:
+	int capacitate_extra; // Capacitate suplimentară specifică unui PowerBank
+
+public:
+	PowerBank(int nrMagazin, float* pret, float greutate, string culoare, int nivel, int capacitate_extra)
+		: Baterie(nrMagazin, pret, greutate, culoare, nivel), capacitate_extra(capacitate_extra) {}
+
+	void afiseazaDetaliiPowerBank() {
+		cout << "Capacitate suplimentara: " << capacitate_extra << endl;
+	}
+};
+
+//Explicati conceptele de early binding si late binding
+
+class A {
+public:
+	virtual void afiseaza() {
+		cout << "Afisare A" << endl;
+	}
+};
+
+class B : public A {
+public:
+	void afiseaza()  {
+		cout << "Afisare B" << endl;
+	}
+};
+
+//Exemplificați conceptul de functie template in C++
+
+template <class T>
+T adunare(T a, T b) {
+	return a + b;
+}
+
+
+int main() {
+
+	Baterie b1;
+	int nr = 3;
+	float* a = new float[nr] {10, 15, 20};
+	Baterie b2( 3, new float[3] {10, 15, 20}, 9, "alb", 95);
+
+	cout << b1 << endl;
+	cout << b2 << endl;
+
+
+	b2 += 5;
+	cout << b2;
+	b2 -= 50;
+	cout << endl << b2;
+
+	if (b1 == b2) {
+		cout << "Obiectele b1 si b2 sunt egale!" << endl;
+	}
+	else {
+		cout << "Obiectele b1 si b2 nu sunt egale!" << endl;
+	}
+
+	 A a1;
+	 a1.afiseaza(); // Early binding
+
+	 A *a1 = new B();
+	 a1.afiseaza(); // Late binding, apelul va duce la funcția din clasa B
+	
+	 
+	 int x = 10, y = 20;
+	 cout << adunare(x, y) << endl; // Funcția template lucrează cu int
+	float a3 = 3.5, b = 4.5;
+	 cout << adunare(a3, b) << endl; // Funcția template lucrează cu float
+
+	 return 0;
+}
